@@ -1,0 +1,9 @@
+*.exe
+*.bat
+*.o
+*old
+*.gcda
+*.gcno
+*.gcov
+*.dot
+*.info
