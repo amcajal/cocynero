@@ -7,3 +7,6 @@
 *.gcov
 *.dot
 *.info
+*.pspimage
+*_log_*.txt
+__pycache__
