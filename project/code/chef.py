@@ -3,7 +3,22 @@
 #
 #   File: chef.py
 #
-#   Description: @TODO
+#   Description:
+#       Implements the Chef class.
+#
+#       Chef class provides the core functionality of Cocynero project.
+#       It reads data from the "recipes.csv" and "ingredients.csv", and
+#       using such data, it is able to do thins like:
+#       - Generate a weekly menu by randomly choose recipes (default 14)
+#       - Generate the shooping list of the previous menu, listing all
+#           required ingredients
+#       - Search for recipes following several criterias (like "recipes
+#           with 'eggs' word in its title")
+#       and others.
+#
+#       Chef class should be the interface (or gateway) between the user
+#       and the datasets (recipes.csv and ingredients.csv), so its design
+#       must be focused in being easy to use and as intuitive as possible.
 #       
 #   Notes: N/A
 #
