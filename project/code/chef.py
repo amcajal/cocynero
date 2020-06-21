@@ -71,7 +71,8 @@ class Chef():
     
     def __init__(self,
                  recipes_file= "./recipes.csv",
-                 shopping_list_file= "./shopping_list.txt"):
+                 shopping_list_file= "./shopping_list.txt",
+                 notes_file = "./cocynero_notes.txt"):
         
         # By default, the input file with the recpes data is "recipes.csv"
         self.recipes_file_abspath = recipes_file
@@ -79,6 +80,11 @@ class Chef():
         # By default, the file where the shopping list will be written
         # is called "shopping_list.txt"
         self.shopping_list_file_abspath = shopping_list_file
+
+        # When executing "tell_me_about" method (and probably others),
+        # the result may be too big to handle or even read it properly in
+        # a terminal, so the result is going to be written in this file too.
+        self.notes_file_abspath = notes_file
 
         # This variable holds the configuration status of the chef object.
         # If false, several operations will be disabled until the object
@@ -160,6 +166,7 @@ class Chef():
         # - Loading the contents of recipes_file into recipe_book
         # - Check the recipe_book is not empty
         try:
+            print("Chef is reading recipes from {f}".format(f=self.recipes_file_abspath))
             with open(self.recipes_file_abspath, mode='r', encoding='utf-8') as reader:
                 content = reader.readlines()
 
@@ -193,17 +200,39 @@ class Chef():
             return
 
         # Reaching here means configuration is done
+        
+        # Writing to this files may fail later, but at least, warn the user
+        # about the intention of the program
+        print("Chef will:\n-write shopping list in {f1}\n-write any other notes in {f2}".format(
+            f1 = self.shopping_list_file_abspath,
+            f2 = self.notes_file_abspath))
         print("Chef ready!")
         self.is_chef_configured = True
 
 
+    # This is a rather simple function to "pretty print" a pair of
+    # key-value from a dictionary, in a specific format that may be easily
+    # changed in the future.
+    # Because the "recipes_book" dictionary is the "single source of truth"
+    # of the Chef class, only the key is required as input parameter
+    def print_key_value(self, key):
+        return "{k}: {v}".format(
+            k=key,
+            v=self.recipe_book[key][self.title_field_index])
+
+        
     def show_menu(self):
-        # Print only recipe ID and recipe title        
-        for unique_id in self.menu:
-            recipe_title = self.recipe_book[unique_id][self.title_field_index]
-            print("{key}: {value}\n".format(
-                key=unique_id,
-                value = recipe_title))
+        content_as_list = [self.print_key_value(k) for k in self.menu]
+        content_as_text = "\n".join(content_as_list)
+        print(content_as_text)
+        try:
+            print("Menu written also in {f}".format(f=self.notes_file_abspath))
+            with open(self.notes_file_abspath, mode='w', encoding='utf-8') as writer:
+                writer.write(content_as_text)
+        except IOerror as err:
+            # Instead of using error_code=2, maybe its a good idea to define
+            # a different error code, specific for this situation
+            self.handle_error(error_code=2, error_details=err)
 
                 
     def print_shopping_list(self):
