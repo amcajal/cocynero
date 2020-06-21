@@ -277,7 +277,7 @@ class Chef():
         self.print_shopping_list()
         
             
-    def do_menu(self, number_of_recipes=10):
+    def do_menu(self, number_of_recipes=14):
         # If not configured, do first, and if fails, warn user
         # and exit method.
         # This may seem unefficient, but goal is to give the user
