@@ -10,3 +10,5 @@
 *.pspimage
 *_log_*.txt
 __pycache__
+/project/code/*.txt
+/project/code/*.csv
