@@ -57,7 +57,27 @@ $> cd <whatever>/cocynero
 $> bash setup.bsh
 ```
 
-And the fun starts.
+And the fun starts. A typical example of use will be:
+```python
+from cocynero import Chef
+
+# In honor of Karlos Arguiñano, one of the greatest Spanish chefs
+karlos = Chef()
+karlos.config() 
+# >> Chef ready!
+
+karlos.do_menu()
+# 1456: Fried eggs with chips
+# 45: Paella
+# (...)
+
+karlos.do_shopping_list()
+# 1456: Fried eggs with chips
+# 4 eggs
+# 4 potatoes
+# Olive oil
+# (...)
+```
 
 [Back to index](#index)
 
