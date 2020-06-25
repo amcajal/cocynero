@@ -304,6 +304,21 @@ class Chef():
         self.show_menu()
 
 
+    # Append to the "menu" list all recipes with the specified "pattern"
+    # in the specified "field" (i.e: all recipes with word "eggs" in "title")
+    def find_matching_recipes(self, field, pattern):
+        for unique_id in self.recipe_book:
+            # This try-catch block should NOT be necessary, but it is leave
+            # just for security (in case the recipes file is ill-formed or something)
+            try:
+                target_field = self.recipe_book[unique_id][field].lower()
+            except:
+                continue
+
+            if (pattern in target_field):
+                self.menu.append(unique_id)
+
+            
     # This function must be read as follows:
     # "Tell me about recipes ..."
     # - whose recipe id is <recipe_id>
@@ -317,22 +332,27 @@ class Chef():
                       url_with=None,
                       ingredients=None,
                       matching_mode="Some"):
-        # @TODO instead of reuse menu list, use a different list
+
+        #@TODO use a diferent list to store the matching recipes unique_ids?
         self.menu = []
 
-        if(title_with):
-            # The following assign is just to make code more readable
+        if(recipe_id):
+            # This is a dummy way to print a recipe data, but in the future
+            # this could be enhanced
+            try:
+                print(self.recipe_book[str(recipe_id)])
+            except:
+                self.handle_error(error_code=4, bad_id=recipe_id)
+            return
+            
+        elif(title_with):
             pattern=title_with.lower()
-            for unique_id in self.recipe_book:
-                # This try-catch block should NOT be necessary, but it is leave
-                # just for security (in case the recipes file is ill-formed or something)
-                try:
-                    recipe_title = self.recipe_book[unique_id][self.title_field_index].lower()
-                except:
-                    continue
-                
-                if (pattern in recipe_title):
-                    self.menu.append(unique_id)
+            field=self.title_field_index
+            
+        elif(url_with):
+            pattern=url_with.lower()
+            field=self.url_field_index
+        #@TODO match ingredients
 
-            self.show_menu()
-        #https://stackoverflow.com/questions/740287/how-to-check-if-one-of-the-following-items-is-in-a-list
+        self.find_matching_recipes(field, pattern)
+        self.show_menu()
