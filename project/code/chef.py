@@ -177,6 +177,9 @@ class Chef():
                 # Remove blank lines (Probably there is a better way to do this)
                 valid_lines = [x for x in valid_lines if x]
 
+                # Remove white-space characters (in a way that may be considered "overkill")
+                valid_lines = [x.rstrip().strip().lstrip() for x in valid_lines if x]
+
                 # Populate the dictionary
                 # - Keys of the dictionary are Strings, representing unsigned integer numbers
                 #   (the unique id value)
