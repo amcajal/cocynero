@@ -313,9 +313,32 @@ class Chef():
             try:
                 target_field = self.recipe_book[unique_id][field].lower()
             except:
-                continue
+                return
 
             if (pattern in target_field):
+                self.menu.append(unique_id)
+
+
+    # Append to the "menu" list all recipes that use ANY
+    # of the ingredients provided as input parameter
+    # (i.e: input parameter is [eggs, olive oil], so find
+    # all recipes using egss, olive oil, or both)
+    def find_matching_ingredients(self, matching_ingredients):
+        for unique_id in self.recipe_book:
+            # This try-catch block should NOT be necessary, but it is leave
+            # just for security (in case the recipes file is ill-formed or something)
+            try:
+                recipe_ingredients = self.recipe_book[unique_id][self.ingr_field_index:]
+            except:
+                return
+
+            # Turn all strings to lower(), so matching is easier (to avoid
+            # the typical case where "eggs" are not found, but there are Eggs,
+            # or even eGGS
+            recipe_ingredients = [x.lower() for x in recipe_ingredients]
+            matching_ingredients = [x.lower() for x in matching_ingredients]
+
+            if (any(x in matching_ingredients for x in recipe_ingredients)):
                 self.menu.append(unique_id)
 
             
@@ -330,7 +353,7 @@ class Chef():
                       recipe_id=None,
                       title_with=None,
                       url_with=None,
-                      ingredients=None,
+                      ingredients=[],
                       matching_mode="Some"):
 
         #@TODO use a diferent list to store the matching recipes unique_ids?
@@ -352,7 +375,11 @@ class Chef():
         elif(url_with):
             pattern=url_with.lower()
             field=self.url_field_index
-        #@TODO match ingredients
+
+        elif(ingredients):
+            self.find_matching_ingredients(ingredients)
+            self.show_menu()
+            return
 
         self.find_matching_recipes(field, pattern)
         self.show_menu()
