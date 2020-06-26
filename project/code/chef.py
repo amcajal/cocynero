@@ -341,7 +341,24 @@ class Chef():
             recipe_ingredients = [x.lower() for x in recipe_ingredients]
             matching_ingredients = [x.lower() for x in matching_ingredients]
 
-            if (any(x in matching_ingredients for x in recipe_ingredients)):
+            # Turn the recipe ingredients list in a single string, so the "any"
+            # and "all" functions will work as intended. The goal is to find
+            # if the strings in "matching_ingredients" are substrings of
+            # the "recipe_ingredients". If this is done with lists, several
+            # matches wont appear as such.
+            # I.e: if matching_ingredients is ["eggs", "bacon"]
+            # and recipe_ingredients is ["small eggs, "smoky bacon"], the following
+            # call to "any" will return FALSE, because matching between lists only
+            # works when the element X of a list is EXACTLY equal to element Y in the other list
+            #
+            #   any(x in recipe_ingredients for x in matching_ingredients)
+            #
+            # (this return false because element "eggs" is not found in recipe_ingredients)
+            # Thats the root cause: comparision between elements instead of substring in string
+            
+            ingredients_string = ";".join(recipe_ingredients)
+
+            if (any(x in ingredients_string for x in matching_ingredients)):
                 self.menu.append(unique_id)
 
             
