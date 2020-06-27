@@ -62,7 +62,7 @@ And the fun starts. A typical example of use will be:
 from cocynero import Chef
 
 # In honor of Karlos Arguiñano, one of the greatest Spanish chefs
-karlos = Chef()
+karlos = Chef(recipes_file=...) # provide the path to the "recipes.csv" file
 karlos.config() 
 # >> Chef ready!
 
