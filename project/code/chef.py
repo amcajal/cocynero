@@ -19,7 +19,7 @@
 #       Chef class should be the interface (or gateway) between the user
 #       and the datasets (recipes.csv and ingredients.csv), so its design
 #       must be focused in being easy to use and as intuitive as possible.
-#       
+#
 #   Notes: N/A
 #
 #   Contact: Alberto Martin Cajal, amartin.glimpse23<AT>gmail.com
@@ -57,21 +57,21 @@ class Chef():
     # This values may change in the future and be establish in a separate module.
     # This values shall be used to acess the recipes data ONCE IT HAS BEEN
     # PROCESSED in the related data structure.
-    field_separator=";"
-    title_field_index= 0
-    url_field_index= 1
-    ingr_field_index=2 # "ingr" stands for "ingredients"  
-    
+    field_separator = ";"
+    title_field_index = 0
+    url_field_index = 1
+    ingr_field_index = 2 # "ingr" stands for "ingredients"
+
 
     ############################################################################
     # METHODS
     ############################################################################
-    
+
     def __init__(self,
-                 recipes_file= "./recipes.csv",
-                 shopping_list_file= "./shopping_list.txt",
-                 notes_file = "./cocynero_notes.txt"):
-        
+                 recipes_file="./recipes.csv",
+                 shopping_list_file="./shopping_list.txt",
+                 notes_file="./cocynero_notes.txt"):
+
         # By default, the input file with the recpes data is "recipes.csv"
         self.recipes_file_abspath = recipes_file
 
@@ -116,27 +116,29 @@ class Chef():
         error_title = "{class_name}: ERROR CODE {ec}:".format(
             class_name=self.__class__,
             ec=str(error_code))
-        
-        if (error_code==1):
-            message=\
+
+        if error_code == 1:
+            message = \
                  error_title + "Chef could NOT be configured"
             do_this_action = None
 
-        elif (error_code==2):
-            message=\
+        elif error_code == 2:
+            message = \
                 error_title + "Error with file {file}. Error is as follows: {e}\n".format(
-                    file = self.recipes_file_abspath,
-                    e = kwargs)
+                    file=self.recipes_file_abspath,
+                    e=kwargs)
             do_this_action = None
 
-        elif (error_code==3):
-            message=\
-                error_title + "The list of recipes is empty. Maybe the recipes file {f} is empty. Could NOT generate a menu".format(
-                    f = self.recipes_file_abspath)
+        elif error_code == 3:
+            message = \
+                error_title + "The list of recipes is empty." \
+                    + " Maybe the recipes file {f} is empty. Could NOT generate a menu".format(
+                        f=self.recipes_file_abspath)
             do_this_action = None
 
-        elif (error_code==4):
-            message= error_title + "Bad unique ID (no recipe with such ID).\n\tBad ID is: {id}".format(id=kwargs)
+        elif error_code == 4:
+            message = error_title + "Bad unique ID (no recipe with such ID)." \
+                + "\n\tBad ID is: {id}".format(id=kwargs)
             do_this_action = None
 
 
@@ -146,7 +148,7 @@ class Chef():
             header=message_header,
             text=message,
             footer=message_footer))
-        
+
         if do_this_action:
             do_this_action()
 
@@ -155,10 +157,10 @@ class Chef():
     # but it is less friendly with non-technical users. "Get ready" is
     # quite the opposite: it really fits with the other functions
     # (i.e: "Chef, get ready, do menu, do shoppng list") but it is somehow
-    # ambiguous. 
+    # ambiguous.
     def config(self):
         self.is_chef_configured = False
-        
+
         # Configuration involves:
         # - Checking if recipes_file exist and is readable
         # - Loading the contents of recipes_file into recipe_book
@@ -189,24 +191,24 @@ class Chef():
                     # the index 0 element will be unique id value,
                     # while the rest of elements are the recipe title,
                     # the ingredients, etc
-                    self.recipe_book[fields[0]] = fields[1:] 
-                    
-                
+                    self.recipe_book[fields[0]] = fields[1:]
+
+
         except IOError as err:
-            self.handle_error(error_code=2, error_details=err) 
+            self.handle_error(error_code=2, error_details=err)
             return
 
-        if (not self.recipe_book):
+        if not self.recipe_book:
             self.handle_error(error_code=3)
             return
 
         # Reaching here means configuration is done
-        
+
         # Writing to this files may fail later, but at least, warn the user
         # about the intention of the program
         print("Chef will:\n-write shopping list in {f1}\n-write any other notes in {f2}".format(
-            f1 = self.shopping_list_file_abspath,
-            f2 = self.notes_file_abspath))
+            f1=self.shopping_list_file_abspath,
+            f2=self.notes_file_abspath))
         print("Chef ready!")
         self.is_chef_configured = True
 
@@ -221,7 +223,7 @@ class Chef():
             k=key,
             v=self.recipe_book[key][self.title_field_index])
 
-        
+
     def show_menu(self):
         content_as_list = [self.print_key_value(k) for k in self.menu]
         content_as_text = "\n".join(content_as_list)
@@ -231,68 +233,68 @@ class Chef():
             with open(self.notes_file_abspath, mode='w', encoding='utf-8') as writer:
                 writer.write(content_as_text)
         except IOError as err:
-            # Instead of using error_code=2, maybe its a good idea to define
+            # Instead of using error_code = 2, maybe its a good idea to define
             # a different error code, specific for this situation
             self.handle_error(error_code=2, error_details=err)
 
-                
+
     def print_shopping_list(self):
-        shopping_list="\n".join(self.shopping_list)
+        shopping_list = "\n".join(self.shopping_list)
         print(shopping_list)
         try:
             with open(self.shopping_list_file_abspath, mode='w', encoding='utf-8') as writer:
                 writer.write(shopping_list)
         except IOError as err:
-            # Instead of using error_code=2, maybe its a good idea to define
+            # Instead of using error_code = 2, maybe its a good idea to define
             # a different error code, specific for this situation
             self.handle_error(error_code=2, error_details=err)
 
-        
+
     def do_shopping_list(self, recipes_list=None):
         # If the user inputs a list of unique IDs, the shopping list
         # is forcefully generated
-        if (recipes_list):
+        if recipes_list:
             self.shopping_list = []
             self.menu = [str(x) for x in recipes_list]
-            
+
         # print_shopping_list could be called directly,
         # but "do_shopping_list" seems a more natural way
         # to ask for the shopping list (it avoids use the word "print")
-        if (not self.shopping_list):
+        if not self.shopping_list:
             for unique_id in self.menu:
                 try:
                     recipe_title = self.recipe_book[unique_id][self.title_field_index]
                 except:
-                    self.handle_error(error_code=4, bad_id=unique_id) 
+                    self.handle_error(error_code=4, bad_id=unique_id)
                     continue
-                
+
                 recipe_title_line = "### {id}: {title} ###".format(
                     id=unique_id,
                     title=recipe_title)
-                
+
                 ingredients = self.recipe_book[unique_id][self.ingr_field_index:]
 
                 self.shopping_list.append(recipe_title_line)
                 self.shopping_list = self.shopping_list + ingredients
-                
+
         self.print_shopping_list()
-        
-            
+
+
     def do_menu(self, number_of_recipes=14):
         # If not configured, do first, and if fails, warn user
         # and exit method.
         # This may seem unefficient, but goal is to give the user
         # the opportunity to fix whatever problems lead to an incorrect
         # configuration.
-        if (self.is_chef_configured == False):
+        if not self.is_chef_configured:
             self.config()
-            if (self.is_chef_configured == False):
+            if not self.is_chef_configured:
                 self.handle_error(error_code=1)
                 return
 
         # Reaching here means config has been successfull
         # Now: generate the menu
-        
+
         # Basic case, 10 unique keys from the dictionary, without repetition
         # random.sample() ensures no repetition elements
         self.menu = random.sample(list(self.recipe_book), number_of_recipes)
@@ -316,7 +318,7 @@ class Chef():
             except:
                 return
 
-            if (pattern in target_field):
+            if pattern in target_field:
                 self.menu.append(unique_id)
 
 
@@ -353,13 +355,13 @@ class Chef():
             #
             # (this return false because element "eggs" is not found in recipe_ingredients)
             # Thats the root cause: comparision between elements instead of substring in string
-            
+
             ingredients_string = ";".join(recipe_ingredients)
 
-            if (any(x in ingredients_string for x in matching_ingredients)):
+            if any(x in ingredients_string for x in matching_ingredients):
                 self.menu.append(unique_id)
 
-            
+
     # This function must be read as follows:
     # "Tell me about recipes ..."
     # - whose recipe id is <recipe_id>
@@ -371,13 +373,13 @@ class Chef():
                       recipe_id=None,
                       title_with=None,
                       url_with=None,
-                      ingredients=[],
+                      ingredients=None,
                       matching_mode="Some"):
 
         #@TODO use a diferent list to store the matching recipes unique_ids?
         self.menu = []
 
-        if(recipe_id):
+        if recipe_id:
             # This is a dummy way to print a recipe data, but in the future
             # this could be enhanced
             try:
@@ -385,16 +387,16 @@ class Chef():
             except:
                 self.handle_error(error_code=4, bad_id=recipe_id)
             return
-            
-        elif(title_with):
-            pattern=title_with.lower()
-            field=self.title_field_index
-            
-        elif(url_with):
-            pattern=url_with.lower()
-            field=self.url_field_index
 
-        elif(ingredients):
+        elif title_with:
+            pattern = title_with.lower()
+            field = self.title_field_index
+
+        elif url_with:
+            pattern = url_with.lower()
+            field = self.url_field_index
+
+        elif ingredients:
             self.find_matching_ingredients(ingredients)
             self.show_menu()
             return
