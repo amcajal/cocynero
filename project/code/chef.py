@@ -232,7 +232,7 @@ class Chef():
             print("Menu written also in {f}".format(f=self.notes_file_abspath))
             with open(self.notes_file_abspath, mode='w', encoding='utf-8') as writer:
                 writer.write(content_as_text)
-        except IOerror as err:
+        except IOError as err:
             # Instead of using error_code=2, maybe its a good idea to define
             # a different error code, specific for this situation
             self.handle_error(error_code=2, error_details=err)
@@ -244,7 +244,7 @@ class Chef():
         try:
             with open(self.shopping_list_file_abspath, mode='w', encoding='utf-8') as writer:
                 writer.write(shopping_list)
-        except IOerror as err:
+        except IOError as err:
             # Instead of using error_code=2, maybe its a good idea to define
             # a different error code, specific for this situation
             self.handle_error(error_code=2, error_details=err)
