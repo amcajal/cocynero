@@ -10,6 +10,11 @@ ___
 **Tags**: Pylint, python, linter, tool, coding, standard, pylint, official, webpage      
 **URL**: https://www.pylint.org/ 
 ___   
+**id**: 2  
+**Title**: Stack Overflow post about checking if any of the elements of a list is inside another list  
+**Tags**: stack, overflow, stackoverflow, python, check, item, in, list, any   
+**URL**: https://stackoverflow.com/questions/740287/how-to-check-if-one-of-the-following-items-is-in-a-list
+___   
 **id**:   
 **Title**:   
 **Tags**:   
