@@ -61,6 +61,7 @@ class Chef():
     title_field_index = 0
     url_field_index = 1
     ingr_field_index = 2 # "ingr" stands for "ingredients"
+    not_apply_value = "n-a"
 
 
     ############################################################################
