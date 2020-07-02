@@ -326,7 +326,7 @@ class Chef():
     # of the ingredients provided as input parameter
     # (i.e: input parameter is [eggs, olive oil], so find
     # all recipes using egss, olive oil, or both)
-    def find_matching_ingredients(self, matching_ingredients):
+    def find_matching_ingredients(self, matching_ingredients, mode):
         for unique_id in self.recipe_book:
             # This try-catch block should NOT be necessary, but it is leave
             # just for security (in case the recipes file is ill-formed or something)
@@ -358,7 +358,12 @@ class Chef():
 
             ingredients_string = ";".join(recipe_ingredients)
 
-            if any(x in ingredients_string for x in matching_ingredients):
+            if mode == "Some":
+                method = any
+            else:
+                method = all
+
+            if method(x in ingredients_string for x in matching_ingredients):
                 self.menu.append(unique_id)
 
 
@@ -397,7 +402,7 @@ class Chef():
             field = self.url_field_index
 
         elif ingredients:
-            self.find_matching_ingredients(ingredients)
+            self.find_matching_ingredients(ingredients, matching_mode)
             self.show_menu()
             return
 
