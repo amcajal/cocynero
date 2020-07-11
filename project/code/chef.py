@@ -222,7 +222,7 @@ class Chef():
     def print_key_value(self, key):
         return "{k}: {v}".format(
             k=key,
-            v=self.recipe_book[key][self.title_field_index])
+            v=self.recipe_book[key][self.title_field_index].capitalize())
 
 
     def show_menu(self):
