@@ -243,6 +243,7 @@ class Chef():
         shopping_list = "\n".join(self.shopping_list)
         print(shopping_list)
         try:
+            print("Shopping list written also in {f}".format(f=self.shopping_list_file_abspath))
             with open(self.shopping_list_file_abspath, mode='w', encoding='utf-8') as writer:
                 writer.write(shopping_list)
         except IOError as err:
