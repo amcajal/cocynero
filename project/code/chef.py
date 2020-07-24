@@ -210,6 +210,7 @@ class Chef():
         print("Chef will:\n-write shopping list in {f1}\n-write any other notes in {f2}".format(
             f1=self.shopping_list_file_abspath,
             f2=self.notes_file_abspath))
+        print("Execute \"help()\" for usage examples (i.e: my_chef.help())")
         print("Chef ready!")
         self.is_chef_configured = True
 
@@ -324,7 +325,7 @@ class Chef():
                 self.menu.append(unique_id)
 
 
-    # Append to the "menu" list all recipes that use ANY
+    # Append to the "menu" list all recipes that use all or any
     # of the ingredients provided as input parameter
     # (i.e: input parameter is [eggs, olive oil], so find
     # all recipes using egss, olive oil, or both)
@@ -410,3 +411,30 @@ class Chef():
 
         self.find_matching_recipes(field, pattern)
         self.show_menu()
+
+
+    # The arquetypical "help" or "usage" method.
+    # Prints a summary of all available methods, and
+    # examples of use for each one.
+    # The "help" info could be printed following the Unix/Linux
+    # syntax so well known (<command_name> [OPTIONS] [FILE]...)
+    # but once again, target is on normal users, so it will be
+    # printed as plain english.
+    def help(self):
+        print("Chef can do the following things:\n{op1}{op2}{op3}{op4}{op5}{op6}{op7}".format(
+            op1="- config: initializes Chef so it can work. It shall be executed only once at the beggining.\n    i.e: my_chef.config()\n",
+            op2="- do_menu: generates a menu of 14 meals (7 days, 2 per day), or the number specified by the user.\n   i.e: my_chef.do_menu(5)\n",
+            op3="- show_menu: show the last generated menu (if any).\n  i.e: my_chef.show_menu()\n",
+            op4="- do_shopping_list: generates the shopping list with the ingredients for the last generated meny (if any).\n   i.e: my_chef.do_shopping_list()\n",
+            op5="- print_shopping_list: prints the last generated shopping list (if any).\n i.e: my_chef.print_shopping_list()\n",
+            op6="- tell_me_about: Print recipes that matches the user criteria, like: recipes with specific ingredients, with specific title...\n",
+            op7="- help: Prints this very text\n\n"))
+
+        print("Examples of my_chef.tell_me_about() are:\n{ex1}{ex2}{ex3}{ex4}{ex5}".format(
+            ex1="- Print recipe with a specific ID (for example, 3455):\n   my_chef.tell_be_about(recipe_id=3455)\n",
+            ex2="- Print recipes with string \"eggs\" in its title:\n   my_chef.tell_me_about(title_with=\"eggs\")\n",
+            ex3="- Print recipes with string \"european\" in its URL:\n my_chef.tell_me_about(url_with=\"european\")\n",
+            ex4="- Print recipes with SOME of the specified ingredients:\n  my_chef.tell_be_about(ingredients=[\"eggs\", \"bacon\"])\n",
+            ex5="- Print recipes with ALL of the specified ingredients:\n  my_chef.tell_be_about(ingredients=[(...)], matching_mode=\"All\")\n"))
+
+        
